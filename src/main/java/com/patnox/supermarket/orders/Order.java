@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.*;
 import org.apache.commons.lang3.builder.*;
 
@@ -43,13 +45,15 @@ public class Order
 	  
 	  @Column(name = "is_fullfilled" ,columnDefinition = "boolean default false")
 	  private Boolean is_fullfilled;
-	
-	  //@NotBlank
-	  @Column(name = "date_ordered")
+	  
+	  @Column(name = "date_ordered", columnDefinition="DATE DEFAULT CURRENT_DATE")
+	  //@Temporal(TemporalType.DATE)
+	  @JsonFormat(pattern="yyyy-MM-dd", timezone="Africa/Nairobi")
 	  private LocalDate date_ordered;
 	  
-	  //@NotBlank
-	  @Column(name = "date_fullfilled")
+	  @Column(name = "date_fullfilled", columnDefinition="DATE DEFAULT CURRENT_DATE")
+	  //@Temporal(TemporalType.DATE)
+	  @JsonFormat(pattern="yyyy-MM-dd", timezone="Africa/Nairobi")
 	  private LocalDate date_fullfilled;
 	  
 	  @Column(name = "is_deleted" ,columnDefinition = "boolean default false")

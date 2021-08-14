@@ -12,44 +12,43 @@ import java.util.*;
 import java.time.*;
 
 @RestController
-@RequestMapping(path = "api/v1/order")
+@RequestMapping(path = "api/v1/sale")
 public class SaleController {
 	
-	private final OrderService orderService;
+	private final SaleService saleService;
 		
 	@Autowired
-	public SaleController(OrderService orderService) {
-		this.orderService = orderService;
+	public SaleController(SaleService saleService) {
+		this.saleService = saleService;
 	}
 
 	@GetMapping
-	public List<Order> getAll() {
-		return orderService.getAllOrders();
+	public List<Sale> getAll() {
+		return saleService.getAllSales();
 	}
 	
 	@PostMapping
-	public void createNewOrder(@RequestBody Order newOrder)
+	public void createNewSale(@RequestBody Sale newSale)
 	{
-		orderService.addNewOrder(newOrder);
+		saleService.addNewSale(newSale);
 	}
 	
-	@DeleteMapping(path = "{orderId}")
-	public void deleteOrder(@PathVariable("orderId") Long orderId)
+	@DeleteMapping(path = "{saleId}")
+	public void deleteSale(@PathVariable("saleId") Long saleId)
 	{
-		orderService.deleteOrder(orderId);
+		saleService.deleteSale(saleId);
 	}
 	
-	@PutMapping(path = "{orderId}")
-	public void deleteOrder(@PathVariable("orderId") Long orderId,
+	@PutMapping(path = "{saleId}")
+	public void deleteSale(@PathVariable("saleId") Long saleId,
 				@RequestParam(required = false) Long product_id,
 				@RequestParam(required = false) Long quantity,
-				@RequestParam(required = false) Boolean is_fullfilled,
-				@RequestParam(required = false) String date_ordered,
-				@RequestParam(required = false) String date_fullfilled,
+				@RequestParam(required = false) Double price,
+				@RequestParam(required = false) String sale_date,
 				@RequestParam(required = false) Boolean is_deleted
 			)
 	{
-		orderService.updateOrder(orderId, product_id, quantity, is_fullfilled, date_ordered, date_fullfilled, is_deleted);
+		saleService.updateSale(saleId, product_id, quantity, price, sale_date, is_deleted);
 	}
 	
 }

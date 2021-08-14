@@ -33,23 +33,25 @@ public class ProductController {
 		productService.addNewProduct(newProduct);
 	}
 	
-	@DeleteMapping(path = "{orderId}")
-	public void deleteProduct(@PathVariable("orderId") Long orderId)
+	@DeleteMapping(path = "{productId}")
+	public void deleteProduct(@PathVariable("productId") Long productId)
 	{
-		productService.deleteProduct(orderId);
+		productService.deleteProduct(productId);
 	}
 	
-	@PutMapping(path = "{orderId}")
-	public void updateProduct(@PathVariable("orderId") Long orderId,
-				@RequestParam(required = false) Long product_id,
+	@PutMapping(path = "{productId}")
+	public void updateProduct(@PathVariable("productId") Long productId,
+				@RequestParam(required = false) String name,
+				@RequestParam(required = false) String description,
+				@RequestParam(required = false) String barcode,
+				@RequestParam(required = false) Double price,
 				@RequestParam(required = false) Long quantity,
-				@RequestParam(required = false) Boolean is_fullfilled,
-				@RequestParam(required = false) String date_ordered,
-				@RequestParam(required = false) String date_fullfilled,
+				@RequestParam(required = false) Long reorder_level,
+				@RequestParam(required = false) Long reorder_quantity,
 				@RequestParam(required = false) Boolean is_deleted
 			)
 	{
-		productService.updateProduct(orderId, product_id, quantity, is_fullfilled, date_ordered, date_fullfilled, is_deleted);
+		productService.updateProduct(productId, name, description, barcode, quantity, price, reorder_level, reorder_quantity, is_deleted);
 	}
 	
 }

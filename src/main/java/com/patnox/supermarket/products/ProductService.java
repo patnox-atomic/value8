@@ -15,62 +15,64 @@ import java.time.format.FormatStyle;
 @Service
 public class ProductService 
 {
-	private final OrderRepository orderRepository;
+	private final ProductRepository productRepository;
 
 	  @Autowired
-	  public ProductService(OrderRepository orderRepository) {
-	    this.orderRepository = orderRepository;
+	  public ProductService(ProductRepository productRepository) {
+	    this.productRepository = productRepository;
 	  }
 	  
-	public List<Order> getAllOrders() 
+	public List<Product> getAllProducts() 
 	{
-	    return orderRepository.findAll();
+	    return productRepository.findAll();
 	}
 	
-	public void addNewOrder(Order newOrder)
+	public void addNewProduct(Product newProduct)
 	{
-		System.out.println("My New Order: " + newOrder);
-		orderRepository.save(newOrder);
-	}
-	
-	@Transactional
-	public void deleteOrder(Long orderId)
-	{
-		System.out.println("Request to delete Order ID: " + orderId);
-		boolean exists = orderRepository.existsById(orderId);
-		if(!exists)
-		{
-			System.err.println("Error: Order with ID: " + orderId + " does not exist");
-			throw new IllegalStateException("Order with ID: " + orderId + " does not exist");
-		}
-		else
-		{
-			System.out.println("Order with ID: " + orderId + " exists so we will proceed");
-			Order victimizedOrder = orderRepository.findById(orderId).orElseThrow(() -> new IllegalStateException("Order with ID: " + orderId + " does not exist"));
-			victimizedOrder.setIs_deleted(true);
-		}
+		System.out.println("My New Product: " + newProduct);
+		productRepository.save(newProduct);
 	}
 	
 	@Transactional
-	public void updateOrder(Long orderId, Long product_id, Long quantity, Boolean is_fullfilled, String date_ordered, String date_fullfilled, Boolean is_deleted)
+	public void deleteProduct(Long productId)
 	{
-		System.out.println("Request to update Order ID: " + orderId);
-		boolean exists = orderRepository.existsById(orderId);
+		System.out.println("Request to delete Product ID: " + productId);
+		boolean exists = productRepository.existsById(productId);
 		if(!exists)
 		{
-			System.err.println("Error: Order with ID: " + orderId + " does not exist");
-			throw new IllegalStateException("Order with ID: " + orderId + " does not exist");
+			System.err.println("Error: Product with ID: " + productId + " does not exist");
+			throw new IllegalStateException("Product with ID: " + productId + " does not exist");
 		}
 		else
 		{
-			System.out.println("Order with ID: " + orderId + " exists so we will proceed");
-			Order victimizedOrder = orderRepository.findById(orderId).orElseThrow(() -> new IllegalStateException("Order with ID: " + orderId + " does not exist"));
-			if(product_id != null && product_id != 0) victimizedOrder.setProduct_id(product_id);
-			if(quantity != null && quantity != 0) victimizedOrder.setQuantity(quantity);
-			if(is_fullfilled != null) victimizedOrder.setIs_fullfilled(is_fullfilled);
-			if(product_id != null && date_ordered.length() > 0) victimizedOrder.setDate_ordered(LocalDate.parse(date_ordered, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-			if(date_fullfilled != null && date_fullfilled.length() > 0) victimizedOrder.setDate_fullfilled(LocalDate.parse(date_fullfilled, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-			if(is_deleted != null) victimizedOrder.setIs_deleted(is_deleted);
+			System.out.println("Product with ID: " + productId + " exists so we will proceed");
+			Product victimizedProduct = productRepository.findById(productId).orElseThrow(() -> new IllegalStateException("Product with ID: " + productId + " does not exist"));
+			victimizedProduct.setIs_deleted(true);
+		}
+	}
+	
+	@Transactional
+	public void updateProduct(Long productId, String name, String description, String barcode, Long quantity, Double price, Long reorder_level, Long reorder_quantity, Boolean is_deleted)
+	{
+		System.out.println("Request to update Product ID: " + productId);
+		boolean exists = productRepository.existsById(productId);
+		if(!exists)
+		{
+			System.err.println("Error: Product with ID: " + productId + " does not exist");
+			throw new IllegalStateException("Product with ID: " + productId + " does not exist");
+		}
+		else
+		{
+			System.out.println("Product with ID: " + productId + " exists so we will proceed");
+			Product victimizedProduct = productRepository.findById(productId).orElseThrow(() -> new IllegalStateException("Product with ID: " + productId + " does not exist"));
+			if(name != null && name.length() > 0) victimizedProduct.setName(name);
+			if(description != null && description.length() > 0) victimizedProduct.setDescription(description);
+			if(barcode != null && barcode.length() > 0) victimizedProduct.setBarcode(barcode);
+			if(quantity != null && quantity != 0) victimizedProduct.setQuantity(quantity);
+			if(price != null && price != 0.00) victimizedProduct.setPrice(price);
+			if(reorder_quantity != null && reorder_quantity != 0) victimizedProduct.setReorder_quantity(reorder_quantity);
+			if(reorder_level != null && reorder_level != 0) victimizedProduct.setReorder_quantity(reorder_level);
+			if(is_deleted != null) victimizedProduct.setIs_deleted(is_deleted);
 		}
 	}
 }

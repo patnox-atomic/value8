@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public interface SaleRepository extends JpaRepository<Order, Long>{
+public interface SaleRepository extends JpaRepository<Sale, Long>{
 
 }
