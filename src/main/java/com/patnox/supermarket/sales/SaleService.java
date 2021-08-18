@@ -11,15 +11,19 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import com.patnox.supermarket.products.*;
 
 @Service
 public class SaleService 
 {
 	private final SaleRepository saleRepository;
+	private final ProductRepository productRepository;
 
 	  @Autowired
-	  public SaleService(SaleRepository saleRepository) {
+	  public SaleService(SaleRepository saleRepository, ProductRepository productRepository) 
+	  {
 	    this.saleRepository = saleRepository;
+	    this.productRepository = productRepository;
 	  }
 	  
 	public List<Sale> getAllSales() 
@@ -65,7 +69,8 @@ public class SaleService
 		{
 			System.out.println("Sale with ID: " + saleId + " exists so we will proceed");
 			Sale victimizedSale = saleRepository.findById(saleId).orElseThrow(() -> new IllegalStateException("Sale with ID: " + saleId + " does not exist"));
-			if(product_id != null && product_id != 0) victimizedSale.setProduct_id(product_id);
+			Product victimizedProduct = productRepository.findById(product_id).orElseThrow(() -> new IllegalStateException("Product with ID: " + product_id + " does not exist"));
+			if(product_id != null && product_id != 0) victimizedSale.setProduct(victimizedProduct);
 			if(quantity != null && quantity != 0) victimizedSale.setQuantity(quantity);
 			if(price != null && price != 0) victimizedSale.setPrice(price);
 			if(sale_date != null && sale_date.length() > 0) victimizedSale.setSale_date(LocalDate.parse(sale_date, DateTimeFormatter.ofPattern("yyyy-MM-dd")));

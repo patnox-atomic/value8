@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.patnox.supermarket.products.Product;
 
 import java.time.*;
 import org.apache.commons.lang3.builder.*;
@@ -33,10 +34,18 @@ public class Order
 	  )
 	  private Long id;
 	  
-	  //@NotBlank
-	  @NotNull
-	  @Column(name = "product_id")
-	  private Long product_id;
+//	  @NotNull
+//	  @Column(name = "product_id")
+//	  private Long product_id;
+	  //@ManyToOne(optional = false)
+	  //@OneToOne(cascade = CascadeType.MERGE)
+	  @OneToOne(fetch = FetchType.EAGER,
+      cascade = {
+              CascadeType.MERGE,
+              CascadeType.REFRESH
+          })
+	  @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
+	  private Product product;
 	
 	  @NotNull
 	  @Min(1)
@@ -60,27 +69,29 @@ public class Order
 	  private Boolean is_deleted;
 	  
 	  public Order() {}
-	
-	  public Order(Long id, Long product_id, Long quantity, Boolean is_fullfilled, LocalDate date_ordered, LocalDate date_fullfilled, Boolean is_deleted) 
-	  {
-		    this.id = id;
-		    this.product_id = product_id;
-		    this.quantity = quantity;
-		    this.is_fullfilled = is_fullfilled;
-		    this.date_ordered = date_ordered;
-		    this.date_fullfilled = date_fullfilled;
-		    this.is_deleted = is_deleted;
-	  }
 	  
-	  public Order(Long product_id, Long quantity, Boolean is_fullfilled, LocalDate date_ordered, LocalDate date_fullfilled, Boolean is_deleted) 
-	  {
-		    this.product_id = product_id;
-		    this.quantity = quantity;
-		    this.is_fullfilled = is_fullfilled;
-		    this.date_ordered = date_ordered;
-		    this.date_fullfilled = date_fullfilled;
-		    this.is_deleted = is_deleted;
-	  }
+	  public Order(Long id, Product product, @NotNull @Min(1) Long quantity, Boolean is_fullfilled, LocalDate date_ordered,
+				LocalDate date_fullfilled, Boolean is_deleted) {
+			super();
+			this.id = id;
+			this.product = product;
+			this.quantity = quantity;
+			this.is_fullfilled = is_fullfilled;
+			this.date_ordered = date_ordered;
+			this.date_fullfilled = date_fullfilled;
+			this.is_deleted = is_deleted;
+		}
+
+		public Order(Product product, @NotNull @Min(1) Long quantity, Boolean is_fullfilled, LocalDate date_ordered,
+				LocalDate date_fullfilled, Boolean is_deleted) {
+			super();
+			this.product = product;
+			this.quantity = quantity;
+			this.is_fullfilled = is_fullfilled;
+			this.date_ordered = date_ordered;
+			this.date_fullfilled = date_fullfilled;
+			this.is_deleted = is_deleted;
+		}
 
 	public Long getId() {
 		return id;
@@ -91,15 +102,40 @@ public class Order
 	}
 
 	public Long getProduct_id() {
-		return product_id;
+		//return product_id;
+		if(product != null)
+		{
+			return product.getId();
+		}
+		else
+		{
+			return(-1L);
+		}
 	}
 
 	public void setProduct_id(Long product_id) {
-		this.product_id = product_id;
+		//this.product_id = product_id;
+		if(product != null)
+		{
+			product.setId(product_id);
+		}
+		else
+		{
+			product = new Product();
+			product.setId(product_id);
+		}
 	}
 
 	public Long getQuantity() {
 		return quantity;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public void setQuantity(Long quantity) {
@@ -138,9 +174,16 @@ public class Order
 		this.is_deleted = is_deleted;
 	}
 
-	public String toString() 
-	{
-		   return ToStringBuilder.reflectionToString(this);
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", quantity=" + quantity + ", is_fullfilled=" + is_fullfilled + ", date_ordered="
+				+ date_ordered + ", date_fullfilled=" + date_fullfilled + ", is_deleted=" + is_deleted
+				+ ", product_id=" + getProduct_id() + "]";
 	}
+
+//	public String toString() 
+//	{
+//		   return ToStringBuilder.reflectionToString(this);
+//	}
 		
 }

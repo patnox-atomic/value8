@@ -1,5 +1,6 @@
 package com.patnox.supermarket.sales;
 
+import com.patnox.supermarket.products.*;
 import javax.persistence.*;
 import java.util.*;
 
@@ -34,9 +35,19 @@ public class Sale
 	  )
 	  private Long id;
 	  
-	  @NotNull
-	  @Column(name = "product_id")
-	  private Long product_id;
+	  //@NotNull
+	  //@Column(name = "product_id")
+	  //private Long product_id;
+	  //@ManyToOne(optional = false)
+	  //@OneToOne(cascade = CascadeType.MERGE)
+	  @OneToOne(fetch = FetchType.EAGER,
+        cascade = {
+                CascadeType.MERGE,
+                CascadeType.REFRESH
+            })
+	  @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
+	  private Product product;
+	  //private Long product_id;
 	  
 	  @NotNull
 	  @Column(name = "quantity")
@@ -55,28 +66,29 @@ public class Sale
 	  @Column(name = "is_deleted" ,columnDefinition = "boolean default false")
 	  private Boolean is_deleted;
 	  
-	  public Sale() {}  
+	  public Sale() {}
+	  
+	  public Sale(Long id, Product product, @NotNull Long quantity, @NotNull @Min(1) Double price, LocalDate sale_date,
+				Boolean is_deleted) {
+			super();
+			this.id = id;
+			this.product = product;
+			this.quantity = quantity;
+			this.price = price;
+			this.sale_date = sale_date;
+			this.is_deleted = is_deleted;
+		}
+	  
 
-	public Sale(Long id, @NotNull Long product_id, @NotNull Long quantity, @NotNull @Min(1) Double price,
-			LocalDate sale_date, Boolean is_deleted) {
-		super();
-		this.id = id;
-		this.product_id = product_id;
-		this.quantity = quantity;
-		this.price = price;
-		this.sale_date = sale_date;
-		this.is_deleted = is_deleted;
-	}
-
-	public Sale(@NotNull Long product_id, @NotNull Long quantity, @NotNull @Min(1) Double price, LocalDate sale_date,
+		public Sale(Product product, @NotNull Long quantity, @NotNull @Min(1) Double price, LocalDate sale_date,
 			Boolean is_deleted) {
-		super();
-		this.product_id = product_id;
-		this.quantity = quantity;
-		this.price = price;
-		this.sale_date = sale_date;
-		this.is_deleted = is_deleted;
-	}
+			super();
+			this.product = product;
+			this.quantity = quantity;
+			this.price = price;
+			this.sale_date = sale_date;
+			this.is_deleted = is_deleted;
+		}
 
 	public Long getId() {
 		return id;
@@ -95,15 +107,41 @@ public class Sale
 	}
 
 	public Long getProduct_id() {
-		return product_id;
+		//return product_id;
+		if(product != null)
+		{
+			return product.getId();
+		}
+		else
+		{
+			return(-1L);
+		}
 	}
 
 	public void setProduct_id(Long product_id) {
-		this.product_id = product_id;
+		//this.product_id = product_id;
+		if(product != null)
+		{
+			product.setId(product_id);
+		}
+		else
+		{
+			product = new Product();
+			product.setId(product_id);
+		}
 	}
+	
 
 	public Double getPrice() {
 		return price;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public void setPrice(Double price) {
@@ -126,9 +164,17 @@ public class Sale
 		this.quantity = quantity;
 	}
 
-	public String toString() 
-	{
-		   return ToStringBuilder.reflectionToString(this);
+	@Override
+	public String toString() {
+		return "Sale [id=" + id + ", quantity=" + quantity + ", price=" + price + ", sale_date=" + sale_date
+				+ ", is_deleted=" + is_deleted + ", product_id=" + getProduct_id() + "]";
 	}
+
+//	public String toString() 
+//	{
+//		   return ToStringBuilder.reflectionToString(this);
+//	}
+	
+	
 		
 }

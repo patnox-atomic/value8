@@ -29,8 +29,17 @@ public class ProductService
 	
 	public void addNewProduct(Product newProduct)
 	{
+		//We enforce that the barcode should be unique
 		System.out.println("My New Product: " + newProduct);
-		productRepository.save(newProduct);
+		Optional<Product> productByBarcode = productRepository.findProductByBarCode(newProduct.getBarcode());
+		if(productByBarcode.isPresent())
+		{
+			throw new IllegalStateException("Barcode Taken");
+		}
+		else
+		{
+			productRepository.save(newProduct);
+		}
 	}
 	
 	@Transactional

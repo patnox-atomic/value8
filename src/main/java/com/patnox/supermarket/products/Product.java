@@ -51,7 +51,7 @@ public class Product
 	  
 	  @NotBlank
 	  @NotNull
-	  @Column(name = "barcode", length = 254)
+	  @Column(name = "barcode", length = 254, unique = true, nullable = false)
 	  @Size(min = 1, max = 254)
 	  @Length(min = 1, max = 254)
 	  private String barcode;
@@ -62,6 +62,7 @@ public class Product
 	  private Double price;
 	  
 	  @NotNull
+	  @Min(1)
 	  @Column(name = "quantity")
 	  private Long quantity;
 	  
