@@ -14,6 +14,9 @@ Vue.config.productionTip = false
 //axios
 Vue.use(VueAxios, axios)
 
+//API URL
+axios.defaults.baseURL = "http://localhost:8080/api/v1"
+
 new Vue({
   router,
   store,
