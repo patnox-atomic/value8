@@ -34,7 +34,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		if(request.getServletPath().equalsIgnoreCase("/login"))
+		log.info("URL Path is: {}", request.getServletPath());
+		if(request.getServletPath().equalsIgnoreCase("/login") || request.getServletPath().equalsIgnoreCase("/api/refreshtoken") || request.getServletPath().equalsIgnoreCase("/login/") || request.getServletPath().equalsIgnoreCase("/api/refreshtoken/"))
 		{
 			//we ignore
 			filterChain.doFilter(request, response);
@@ -62,6 +63,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter
 				}
 				catch(Exception e)
 				{
+					e.printStackTrace();
 					log.error("Got Error Authorizing User: {}", e.getMessage());
 					response.setHeader("error", e.getMessage());
 					response.setStatus(HttpStatus.FORBIDDEN.value());

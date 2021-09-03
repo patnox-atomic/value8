@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .formLogin();
     	http.csrf().disable();
     	//http.authenticated().and().formLogin();
+    	http.authorizeRequests().antMatchers("/api/refreshtoken/**").permitAll();
     	http.authorizeRequests().antMatchers("/api/v*/registration/**").permitAll();
         http.authorizeRequests().antMatchers("/api/v*/order/**").hasAnyAuthority("RETAIL_ATTENDANT_ROLE", "WAREHOUSE_ATTENDANT_ROLE", "SUPERUSER_ROLE");
         http.authorizeRequests().antMatchers("/api/v*/product/**").hasAnyAuthority("RETAIL_ATTENDANT_ROLE", "WAREHOUSE_ATTENDANT_ROLE", "SUPERUSER_ROLE");
