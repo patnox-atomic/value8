@@ -16,7 +16,7 @@ import java.util.*;
 import java.time.*;
 
 @RestController
-@RequestMapping(path = "api/v1/users")
+@RequestMapping(path = "api/v1/user")
 public class AppUserController 
 {
 	private final AppUserService appUserService;

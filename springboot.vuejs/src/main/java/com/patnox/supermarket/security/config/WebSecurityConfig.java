@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.authentication.*;
 
 @Configuration
@@ -23,20 +24,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/api/v*/registration/**")
-                    .permitAll()
-                .anyRequest()
-                .authenticated().and()
-                .formLogin();
+//        http
+//                .csrf().disable()
+//                .authorizeRequests()
+//                    .antMatchers("/api/v*/registration/**")
+//                    .permitAll()
+//                .anyRequest()
+//                .authenticated().and()
+//                .formLogin();
+    	http.csrf().disable();
+    	//http.authenticated().and().formLogin();
+    	http.authorizeRequests().antMatchers("/api/v*/registration/**").permitAll();
         http.authorizeRequests().antMatchers("/api/v*/order/**").hasAnyAuthority("RETAIL_ATTENDANT_ROLE", "WAREHOUSE_ATTENDANT_ROLE", "SUPERUSER_ROLE");
         http.authorizeRequests().antMatchers("/api/v*/product/**").hasAnyAuthority("RETAIL_ATTENDANT_ROLE", "WAREHOUSE_ATTENDANT_ROLE", "SUPERUSER_ROLE");
         http.authorizeRequests().antMatchers("/api/v*/sale/**").hasAnyAuthority("RETAIL_ATTENDANT_ROLE", "WAREHOUSE_ATTENDANT_ROLE", "SUPERUSER_ROLE");
         http.authorizeRequests().antMatchers("/api/v*/user/**").hasAnyAuthority("SUPERUSER_ROLE");
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

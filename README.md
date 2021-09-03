@@ -50,7 +50,8 @@ The following languages are what we currently use in our company and will be giv
 
 ### Hosted App Link
 
-    https://value8patnox.herokuapp.com/
+    https://value8.herokuapp.com/  -- frontend
+    https://value8backend.herokuapp.com/ -- backend
 
 ### Comments
 
