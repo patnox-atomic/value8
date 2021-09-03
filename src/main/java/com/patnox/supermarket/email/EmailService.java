@@ -38,8 +38,12 @@ public class EmailService implements EmailSender{
             helper.setFrom("hello@amigoscode.com");
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            LOGGER.error("failed to send email", e);
-            throw new IllegalStateException("failed to send email");
+            LOGGER.error("Messaging Error: failed to send email", e);
+            //throw new IllegalStateException("failed to send email");
+        }
+        catch(Exception e)
+        {
+        	LOGGER.error("General Error: failed to send email", e);
         }
     }
 }

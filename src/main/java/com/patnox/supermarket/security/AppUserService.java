@@ -1,5 +1,6 @@
 package com.patnox.supermarket.security;
 
+import com.patnox.supermarket.products.Product;
 import com.patnox.supermarket.registration.token.ConfirmationToken;
 import com.patnox.supermarket.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,6 +31,11 @@ public class AppUserService implements UserDetailsService {
                         new UsernameNotFoundException(
                                 String.format(USER_NOT_FOUND_MSG, email)));
     }
+    
+    public List<AppUser> getAllAppUsers() 
+	{
+	    return appUserRepository.findAll();
+	}
 
     public String signUpUser(AppUser appUser) {
         boolean userExists = appUserRepository

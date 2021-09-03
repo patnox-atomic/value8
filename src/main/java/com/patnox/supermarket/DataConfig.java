@@ -10,6 +10,7 @@ import java.util.*;
 import com.patnox.supermarket.orders.*;
 import com.patnox.supermarket.products.*;
 import com.patnox.supermarket.sales.*;
+import com.patnox.supermarket.security.*;
 
 @Configuration
 public class DataConfig 
@@ -21,9 +22,10 @@ public class DataConfig
     }
 	
 	@Bean
-	CommandLineRunner productDataInjector(ProductRepository productRepository, OrderRepository orderRepository, SaleRepository saleRepository)
+	CommandLineRunner productDataInjector(ProductRepository productRepository, OrderRepository orderRepository, SaleRepository saleRepository, AppUserService userService)
 	{
 		return args -> {
+			//Sample products
 			Product prd1 = new Product(
 					"SuperLoaf",
 					"Best Bread Ever",
@@ -44,9 +46,50 @@ public class DataConfig
 					900L,
 					false
 			);
-			productRepository.saveAll(
-					List.of(prd1, prd2)
+			Product prd3 = new Product(
+					"Lenovo",
+					"SuperComputer",
+					"377283927194",
+					32.00D,
+					500L,
+					30L,
+					600L,
+					false
 			);
+			Product prd4 = new Product(
+					"Socks",
+					"Bata",
+					"38291029338847",
+					236.00D,
+					650L,
+					60L,
+					900L,
+					false
+			);
+			Product prd5 = new Product(
+					"Shoes",
+					"Sneakers",
+					"392934726",
+					69.00D,
+					500L,
+					30L,
+					600L,
+					false
+			);
+			Product prd6 = new Product(
+					"Trousers",
+					"Chinoz Jeans",
+					"4839283921128",
+					233.00D,
+					650L,
+					60L,
+					900L,
+					false
+			);
+			productRepository.saveAll(
+					List.of(prd1, prd2, prd3, prd4, prd5, prd6)
+			);
+			//Sample Orders
 //			Product prdOne = productRepository.findById(1L).orElseThrow(() -> new IllegalStateException("Product with ID: 1 does not exist"));
 //			System.out.println("Found Product One: " + prdOne.getName());
 //			Product prdTwo = productRepository.findById(2L).orElseThrow(() -> new IllegalStateException("Product with ID: 1 does not exist"));
@@ -70,6 +113,7 @@ public class DataConfig
 			orderRepository.saveAll(
 					List.of(ord1, ord2)
 			);
+			//Sample sales
 			Sale sal1 = new Sale(
 					prd1,
 					5L,
@@ -87,6 +131,37 @@ public class DataConfig
 			saleRepository.saveAll(
 					List.of(sal1, sal2)
 			);
+			//Sample users
+			AppUser au1 = new AppUser(
+					"john",
+					"doe",
+					"john.doe@yahoo.com",
+					"123456",
+					AppUserRole.RETAIL_ATTENDANT_ROLE,
+					false,
+					true
+			);
+			AppUser au2 = new AppUser(
+					"peter",
+					"mash",
+					"peter.mash@gmail.com",
+					"123456",
+					AppUserRole.WAREHOUSE_ATTENDANT_ROLE,
+					false,
+					true
+			);
+			AppUser au3 = new AppUser(
+					"Elon",
+					"MASKER",
+					"elon.masker@mailinator.com",
+					"123456",
+					AppUserRole.SUPERUSER_ROLE,
+					false,
+					true
+			);
+			userService.signUpUser(au1);
+			userService.signUpUser(au2);
+			userService.signUpUser(au3);
 		};
 	}
 	
