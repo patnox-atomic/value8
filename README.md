@@ -57,3 +57,48 @@ The following languages are what we currently use in our company and will be giv
 
     Used SpringBoot for the backend
     Used VueJs for the frontend
+    
+    To Login, Use these credentials:
+    
+    Store Attendant:
+    username: "john.doe@yahoo.com",
+    password: "123456"
+    
+    Warehouse Attendant:
+    username: "peter.mash@gmail.com",
+    password: "123456"
+    
+    System Admin:
+    username: "elon.masker@mailinator.com",
+    password: "123456"
+    
+    For Testing:
+    Use the provided Postman Script to send API requests to the backend i.e https://value8backend.herokuapp.com/
+    
+    backend endpoints:
+    
+    api/v1/product -- products
+    api/v1/order -- orders
+    api/v1/sale -- sales
+    api/v1/user -- users
+    
+    Security Endpoints:
+    
+    login/ -- login into the app
+    api/refreshtoken -- refresh JWT token
+    
+    FrontEnd:
+    The front end is at https://value8.herokuapp.com/
+    Login before first use
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
