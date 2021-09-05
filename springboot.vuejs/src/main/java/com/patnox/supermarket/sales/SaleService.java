@@ -13,7 +13,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import com.patnox.supermarket.products.*;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class SaleService 
 {
 	private final SaleRepository saleRepository;
@@ -31,10 +34,26 @@ public class SaleService
 	    return saleRepository.findAll();
 	}
 	
+	@Transactional
 	public void addNewSale(Sale newSale)
 	{
-		System.out.println("My New Sale: " + newSale);
-		saleRepository.save(newSale);
+		//Check if we have enough stock
+		long product_id = newSale.getProduct_id();
+		long quantity = newSale.getQuantity();
+		Product myProduct = productRepository.findById(product_id).orElseThrow(() -> new IllegalStateException("Product with ID: " + product_id + " does not exist"));
+		long availableQuantity = myProduct.getQuantity();
+		if(availableQuantity >= quantity)
+		{
+			//reduce the quantity available
+			myProduct.setQuantity(availableQuantity - quantity);
+			//save the sale
+			saleRepository.save(newSale);
+		}
+		else
+		{
+			log.error("Cannot add sale. Not enough stock");
+			throw new IllegalStateException("Cannot add sale. Not enough stock");
+		}
 	}
 	
 	@Transactional

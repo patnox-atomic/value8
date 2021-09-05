@@ -8,6 +8,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.patnox.supermarket.orders.Order;
 import com.patnox.supermarket.products.Product;
 import com.patnox.supermarket.products.ProductService;
 
@@ -43,6 +44,15 @@ public class AppUserController
 	@Autowired
 	public AppUserController(AppUserService appUserService) {
 		this.appUserService = appUserService;
+	}
+	
+	@PostMapping("/v1/user")
+	public void createNewUser(@RequestBody AppUser newUser)
+	{
+		newUser.setAppUserRole(AppUserRole.USER_ROLE);
+		newUser.setEnabled(true);
+		//log.error("Got FirstName: {}", newUser.getFirstName());
+		appUserService.signUpUser(newUser);
 	}
 
 	@GetMapping("/v1/user")

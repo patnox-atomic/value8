@@ -26,7 +26,7 @@
           v-model="userCreation.password"
           label="Password"
         ></v-text-field>
-        <v-btn color="blue" v-on:click="createUser">
+        <v-btn color="blue" v-on:click="saveUser">
           Create User
         </v-btn>
       </v-col>
@@ -90,6 +90,20 @@
         </v-simple-table>
       </v-col>
     </v-row>
+    <v-snackbar
+        v-model="snackbar"
+        :color="color"
+        :top="true"
+    >
+        {{ displayMessage }}
+        <v-btn
+            dark
+            text
+            @click="snackbar = false"
+        >
+            Close
+        </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -109,13 +123,11 @@ export default
         },
         users: [],
         responseSuccess: false,
+        snackbar: false,
+        displayMessage: "",
+        color: 'general',
     }),
     methods: {
-        readUsers: async function() {
-            const data = await api.readUsers();
-            this.users = data;
-            //console.log('Users 1:: ' + JSON.stringify(this.users));
-        },
         getData() {
             this.$http.get('/user', {
             headers: {
@@ -133,24 +145,41 @@ export default
             )
             .catch(error => console.log('User Get Error:: ' + error))
         },
-        createUser: async function() {
+        saveUser() {
             const requestData = {
-                firstName: this.userCreation.firstName,
-                lastName: this.userCreation.lastName,
+                firstName: this.userCreation.firstname,
+                lastName: this.userCreation.lastname,
+                email: this.userCreation.email,
+                password: this.userCreation.password,
             };
-            await api.createUser(requestData);
-            this.userCreation.firstName = "";
-            this.userCreation.lastName = "";
-            this.readUsers();
-            this.responseSuccess = true;
+            this.$http.post('/user', requestData, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                })
+                .then(response => {
+                    ////this.total_items = Number(response.data.meta.querytotal);
+                    ////this.payload = response.data.data;
+                    ////this.loading = false;
+                    // console.log('Orders 1:: ' + JSON.stringify(response.data))
+                    // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
+                    //this.orders = response.data;
+                    this.displayMessage = "User Saved Successfully";
+                    this.snackbar = true;
+                    console.log('User saved successfully');
+                }
+            )
+            .catch(error => {
+                console.log('User Save Error:: ' + error)
+                this.displayMessage = "Error: Failed to Save User";
+                this.snackbar = true;
+            })
         },
     },
     mounted() {
-        //this.readUsers();
         this.getData();
     },
     created() {
-        //this.readUsers();
         this.getData();
     },
 };

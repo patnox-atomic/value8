@@ -90,6 +90,20 @@
         </v-simple-table>
       </v-col>
     </v-row>
+    <v-snackbar
+        v-model="snackbar"
+        :color="color"
+        :top="true"
+    >
+        {{ displayMessage }}
+        <v-btn
+            dark
+            text
+            @click="snackbar = false"
+        >
+            Close
+        </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -112,13 +126,11 @@ export default
         },
         products: [],
         responseSuccess: false,
+        snackbar: false,
+        displayMessage: "",
+        color: 'general',
     }),
     methods: {
-        readProducts: async function() {
-            const data = await api.readProducts();
-            this.products = data;
-            //console.log('products 1:: ' + JSON.stringify(this.products));
-        },
         getData() {
             this.$http.get('/product', {
             headers: {
@@ -136,16 +148,38 @@ export default
             )
             .catch(error => console.log('Products Get Error:: ' + error))
         },
-        createProduct: async function() {
+        createProduct() {
             const requestData = {
-                firstName: this.productCreation.firstName,
-                lastName: this.productCreation.lastName,
+                name: this.productCreation.name,
+                description: this.productCreation.description,
+                barcode: this.productCreation.barcode,
+                price: this.productCreation.price,
+                quantity: this.productCreation.quantity,
+                reorder_level: this.productCreation.reorder_level,
+                reorder_quantity: this.productCreation.reorder_quantity
             };
-            await api.createProduct(requestData);
-            this.productCreation.firstName = "";
-            this.productCreation.lastName = "";
-            this.readProducts();
-            this.responseSuccess = true;
+            this.$http.post('/product', requestData, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                })
+                .then(response => {
+                    ////this.total_items = Number(response.data.meta.querytotal);
+                    ////this.payload = response.data.data;
+                    ////this.loading = false;
+                    // console.log('Orders 1:: ' + JSON.stringify(response.data))
+                    // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
+                    //this.orders = response.data;
+                    this.displayMessage = "Product Saved Successfully";
+                    this.snackbar = true;
+                    console.log('Product saved successfully');
+                }
+            )
+            .catch(error => {
+                console.log('Product Save Error:: ' + error)
+                this.displayMessage = "Error: Failed to Save Product";
+                this.snackbar = true;
+            })
         },
     },
     mounted() {

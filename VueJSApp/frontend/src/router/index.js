@@ -95,7 +95,6 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) 
   {
     if (store.getters.authorized)
-    //if (store.state.isAuthenticated) 
     {
       next()
       return

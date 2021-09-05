@@ -8,6 +8,8 @@ export default {
     state.authStatus = 'success'
     state.token = token
     state.user = user
+    //console.log('Setting Token: ' + JSON.stringify(state.token))
+    //console.log('Setting User: ' + JSON.stringify(state.user))
   },
   auth_error (state) {
     state.authStatus = 'error'

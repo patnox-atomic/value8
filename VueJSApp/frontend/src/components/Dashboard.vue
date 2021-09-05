@@ -4,10 +4,10 @@
       <v-container class="py-0 fill-height">
         
         <!-- Menu Buttons -->
-        <v-btn to="/order" text>Orders</v-btn>
-        <v-btn to="/product" text>Products</v-btn>
-        <v-btn to="/sale" text>Sales</v-btn>
-        <v-btn to="/user" text>Users</v-btn>
+        <v-btn v-if="getUserRole(['SUPERUSER_ROLE', 'RETAIL_ATTENDANT_ROLE', 'WAREHOUSE_ATTENDANT_ROLE'])" to="/order" text>Orders</v-btn>
+        <v-btn v-if="getUserRole(['SUPERUSER_ROLE', 'RETAIL_ATTENDANT_ROLE'])" to="/product" text>Products</v-btn>
+        <v-btn v-if="getUserRole(['SUPERUSER_ROLE', 'RETAIL_ATTENDANT_ROLE'])" to="/sale" text>Sales</v-btn>
+        <v-btn v-if="getUserRole(['SUPERUSER_ROLE'])" to="/user" text>Users</v-btn>
         <v-btn @click.prevent="logout" text>Logout</v-btn>
         <v-spacer></v-spacer>
         <v-responsive max-width="260"> </v-responsive>
@@ -39,8 +39,26 @@ export default {
   methods: {
     logout: function () {
       this.$store.dispatch('logout').then(() => {
-        this.$router.push('/')
+        this.$router.push('/login')
       })
+    },
+    getUserRole(role)
+    {
+      const roles = localStorage.getItem('scope');
+      var found = false;
+      for (let i = 0; i < role.length; i++) 
+      {
+        const search = roles.indexOf(role[i]);
+        const ret = (search == -1) ? false : true;
+        if(ret)
+        {
+          found = true;
+          break;
+        }
+      }
+      // const search = roles.indexOf(role);
+      // const ret = (search == -1) ? false : true;
+      return(found);
     },
   },
   mounted() {
