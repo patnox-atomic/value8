@@ -2,6 +2,10 @@ package com.patnox.supermarket.security.config;
 
 import com.patnox.supermarket.security.AppUserService;
 import lombok.AllArgsConstructor;
+
+import java.util.Arrays;
+import java.util.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,6 +16,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.*;
 import org.springframework.security.authentication.*;
 
 @Configuration
@@ -33,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .authenticated().and()
 //                .formLogin();
     	http.csrf().disable();
+    	http.cors();
     	//http.authenticated().and().formLogin();
     	http.authorizeRequests().antMatchers("/api/refreshtoken/**").permitAll();
     	http.authorizeRequests().antMatchers("/api/v*/registration/**").permitAll();
@@ -63,5 +72,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception
     {
     	return(super.authenticationManagerBean());
+    }
+    
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        //corsConfiguration.setAllowedOrigins(Arrays.asList("https://example.com"));
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        //corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "accesstoken", "refreshtoken", "access_token", "refresh_token"));
+        corsConfiguration.setExposedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "accesstoken", "refreshtoken", "access_token", "refresh_token"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 }
