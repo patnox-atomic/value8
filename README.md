@@ -95,6 +95,10 @@ The following languages are what we currently use in our company and will be giv
     The front end is at https://value8.herokuapp.com/
     Login before first use
     
+    Running Tests:
+    	Backend (2 tests available): Run command on terminal: $ mvnw clean package
+    	Frontend: 
+    
     Client Requirements:
     
     	- Seed 5 test products into the database with a default amount of inventory and reorder level -- done

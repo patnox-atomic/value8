@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.patnox.supermarket.orders.Order;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.*;
 import java.time.*;
@@ -25,6 +28,12 @@ public class ProductService
 	public List<Product> getAllProducts() 
 	{
 	    return productRepository.findAll();
+	}
+	
+	//Get a specific product
+	public Product getProduct(Long productId) 
+	{
+	    return productRepository.findById(productId).orElseThrow(() -> new IllegalStateException("Product with ID: " + productId + " does not exist"));
 	}
 	
 	public void addNewProduct(Product newProduct)

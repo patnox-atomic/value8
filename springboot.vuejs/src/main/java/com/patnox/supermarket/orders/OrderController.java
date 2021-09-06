@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
+//import org.springframework.boot.test.context.*;
 
 import java.util.*;
 import java.time.*;
 
 @RestController
+//@TestConfiguration
 @RequestMapping(path = "api/v1/order")
 public class OrderController {
 	
@@ -25,6 +27,11 @@ public class OrderController {
 	@GetMapping
 	public List<Order> getAll() {
 		return orderService.getAllOrders();
+	}
+	
+	@GetMapping(path = "{orderId}")
+	public Order getOrder(@PathVariable("orderId") Long orderId) {
+		return orderService.getOrder(orderId);
 	}
 	
 	@PostMapping

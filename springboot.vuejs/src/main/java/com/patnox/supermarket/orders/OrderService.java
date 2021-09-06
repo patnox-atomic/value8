@@ -30,6 +30,12 @@ public class OrderService
 	    return orderRepository.findAll();
 	}
 	
+	//Get a specific order
+	public Order getOrder(Long orderId) 
+	{
+	    return orderRepository.findById(orderId).orElseThrow(() -> new IllegalStateException("Order with ID: " + orderId + " does not exist"));
+	}
+	
 	@Transactional
 	public void fullfillOrder(Long orderId)
 	{
