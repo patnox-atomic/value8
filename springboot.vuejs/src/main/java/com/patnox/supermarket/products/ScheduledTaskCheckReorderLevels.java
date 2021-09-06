@@ -29,7 +29,7 @@ public class ScheduledTaskCheckReorderLevels
 	}
 
 	//check after every 30 seconds
-	@Scheduled(fixedRate = 5000)
+	@Scheduled(fixedRate = 30000)
 	public void checkProductReorderLevels() {
 		log.info("Checking Product Reorder Levels. The time is now {}", dateFormat.format(new Date()));
 		//get all products

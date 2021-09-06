@@ -33,6 +33,12 @@ public class OrderController {
 		orderService.addNewOrder(newOrder);
 	}
 	
+	@PostMapping("/fullfill")
+	public void fullfillOrder(@RequestParam(required = true) Long orderId)
+	{
+		orderService.fullfillOrder(orderId);
+	}
+	
 	@DeleteMapping(path = "{orderId}")
 	public void deleteOrder(@PathVariable("orderId") Long orderId)
 	{

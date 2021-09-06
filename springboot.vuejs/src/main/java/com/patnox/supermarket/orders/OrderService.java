@@ -30,6 +30,51 @@ public class OrderService
 	    return orderRepository.findAll();
 	}
 	
+	@Transactional
+	public void fullfillOrder(Long orderId)
+	{
+		boolean orderExists = orderRepository.existsById(orderId);
+		if(!orderExists)
+		{
+			System.err.println("Error: Order with ID: " + orderId + " does not exist");
+			throw new IllegalStateException("Order with ID: " + orderId + " does not exist");
+		}
+		else
+		{
+			System.out.println("Order with ID: " + orderId + " exists so we will proceed");
+			//search for the order by id and get order quantity and product id
+			Order selectedOrder = orderRepository.findById(orderId).orElseThrow(() -> new IllegalStateException("Order with ID: " + orderId + " does not exist"));
+			//check if order has already been fullfilled
+			if(!selectedOrder.getIs_fullfilled())
+			{
+				Long productId = selectedOrder.getProduct_id();
+				long orderQuantity = selectedOrder.getQuantity();
+				//mark order as fullfilled
+				selectedOrder.setIs_fullfilled(true);
+				//search for the product by id
+				boolean productExists = productRepository.existsById(productId);
+				if(!productExists)
+				{
+					System.err.println("Error: Product with ID: " + productId + " does not exist");
+					throw new IllegalStateException("Product with ID: " + productId + " does not exist");
+				}
+				else
+				{
+					System.out.println("Product with ID: " + productId + " exists so we will proceed");
+					Product selectedProduct = productRepository.findById(productId).orElseThrow(() -> new IllegalStateException("Product with ID: " + productId + " does not exist"));
+					//increament product quantity
+					Long currentProductQuantity = selectedProduct.getQuantity();
+					selectedProduct.setQuantity((currentProductQuantity + orderQuantity));
+				}
+			}
+			else
+			{
+				System.err.println("Error: Order with ID: " + orderId + " is already fullfilled");
+				throw new IllegalStateException("Order with ID: " + orderId + " is already fullfilled");
+			}
+		}
+	}
+	
 	public void addNewOrder(Order newOrder)
 	{
 		System.out.println("My New Order: " + newOrder);

@@ -105,13 +105,21 @@ public class DataConfig
 			Order ord2 = new Order(
 					prd2,
 					670L,
-					false,
+					true,
 					LocalDate.of(2010, Month.JULY, 16),
 					LocalDate.of(2012, Month.NOVEMBER, 25),
 					false
 			);
+			Order ord3 = new Order(
+					prd3,
+					670L,
+					false,
+					LocalDate.of(2016, Month.MAY, 07),
+					LocalDate.of(2018, Month.AUGUST, 18),
+					false
+			);
 			orderRepository.saveAll(
-					List.of(ord1, ord2)
+					List.of(ord1, ord2, ord3)
 			);
 			//Sample sales
 			Sale sal1 = new Sale(

@@ -31,7 +31,7 @@
       </v-col>
       <v-col sm="6">
         <h3>Orders</h3>
-        <v-simple-table>
+        <!-- <v-simple-table>
           <template v-slot:default>
             <thead>
               <tr>
@@ -66,7 +66,36 @@
               </tr>
             </tbody>
           </template>
-        </v-simple-table>
+        </v-simple-table> -->
+        <v-data-table
+            :headers="headers"
+            :items="orders"
+            sort-by="id"
+            class="elevation-1"
+        >
+            <template v-slot:top>
+                <v-dialog v-model="dialogFullfill" max-width="500px">
+                    <v-card>
+                        <v-card-title class="text-h5">Are you sure you want to fullfill this order?</v-card-title>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="closeFullfillDialog">Cancel</v-btn>
+                            <v-btn color="blue darken-1" text @click="fullfillOrderConfirm">OK</v-btn>
+                            <v-spacer></v-spacer>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </template>
+            <template v-slot:item.actions="{ item }">
+                <v-btn
+                    v-if="item.is_fullfilled==false"
+                    color="blue"
+                    @click="fullfillOrderCheck(item)"
+                >
+                    Fullfill
+                </v-btn>
+            </template>
+        </v-data-table>
       </v-col>
     </v-row>
     <v-snackbar
@@ -88,6 +117,7 @@
 
 <script>
 import api from "@/service/apiService";
+const Querystring = require('querystring');
 
 export default 
 {
@@ -102,6 +132,8 @@ export default
         products: [],
         responseSuccess: false,
         snackbar: false,
+        dialogFullfill: false,
+        fullfillOrderID: 0,
         displayMessage: "",
         color: 'general',
         headers: [
@@ -179,6 +211,50 @@ export default
         {
             console.log('Got Selected Product As:: ' + JSON.stringify(this.orderCreation.product_id));
         },
+        fullfillOrderCheck(item)
+        {
+            this.fullfillOrderID = item.id;
+            this.dialogFullfill = true;
+            console.log('Ready to fullfill order:: ' + JSON.stringify(item));
+        },
+        closeFullfillDialog()
+        {
+            this.dialogFullfill = false;
+        },
+        fullfillOrderConfirm()
+        {
+            this.closeFullfillDialog();
+            this.fullFillOrder();
+        },
+        fullFillOrder()
+        {
+            //NB: we are sending form data not JSON
+            const requestData = {
+                orderId: this.fullfillOrderID,
+            };
+            let body = Querystring['stringify'](requestData);
+            const config = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            }
+            this.$http.post('/order/fullfill', body, config)
+                .then(response => {
+                    // console.log('Orders 1:: ' + JSON.stringify(response.data))
+                    // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
+                    this.getData();
+                    this.displayMessage = "Order Fullfilled Successfully";
+                    this.snackbar = true;
+                    console.log('Order Fullfilled successfully');
+                }
+            )
+            .catch(error => {
+                console.log('Order Fullfill Error:: ' + error)
+                this.displayMessage = "Error: Failed to Fullfill Order";
+                this.snackbar = true;
+            })
+        },
         saveOrder() {
             const requestData = {
                 product_id: this.orderCreation.product_id,
@@ -190,12 +266,9 @@ export default
                     },
                 })
                 .then(response => {
-                    ////this.total_items = Number(response.data.meta.querytotal);
-                    ////this.payload = response.data.data;
-                    ////this.loading = false;
                     // console.log('Orders 1:: ' + JSON.stringify(response.data))
                     // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
-                    //this.orders = response.data;
+                    this.getData();
                     this.displayMessage = "Order Saved Successfully";
                     this.snackbar = true;
                     console.log('Order saved successfully');
