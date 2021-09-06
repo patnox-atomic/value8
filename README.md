@@ -72,6 +72,10 @@ The following languages are what we currently use in our company and will be giv
     username: "elon.masker@mailinator.com",
     password: "123456"
     
+    Note that the system admin (superuser) can perform all actions, the warehouse attendant can only fulfil orders while the retail/store attendant can view products, perform sales, and create orders
+    Note that orders can be manualy created or triggered by the system when reorder levels are reached
+    Note that creating a sale reduces the number of products available
+    
     For Testing:
     Use the provided Postman Script to send API requests to the backend i.e https://value8backend.herokuapp.com/
     
@@ -91,9 +95,23 @@ The following languages are what we currently use in our company and will be giv
     The front end is at https://value8.herokuapp.com/
     Login before first use
     
+    Client Requirements:
     
+    	- Seed 5 test products into the database with a default amount of inventory and reorder level -- done
+	- In the product listing for the store, add a button that reduces inventory to simulate a sale -- done
+	- When inventory hits the predefined reorder level, create an automated reorder in an unprocessed state -- done
+	- The warehouse actor should have a view to see unprocessed reorders -- done
+	- On the reorder listing for the warehouse, have a dispatch button that simulates a dispatch to the store -- done
+	- The above dispatch action should increment inventory in the store -- done
+	- The store actor should also have a view to see unprocessed and processed reorders -- done
     
+    Tech Requirements:
     
+    	- Write at least one unit test for each of the functions that simulate the sale and the dispatch -- done
+	- Provide the command necessary to run your tests -- done
+	- Create a private repository on GitHub and add [info@valuechainfactory.com](mailto:info@valuechainfactory.com) and [thomasjgx@gmail.com](mailto:thomasjgx@gmail.com) as a collaborator -- done
+	- Push your code to that repoitory in as many commits as neccessary - preferably more than one. -- done
+	- Host the solution on [Heroku](https://www.heroku.com/) or an alternative hosting provider and share the link in the section below. -- done
     
     
     

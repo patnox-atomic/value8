@@ -104,6 +104,15 @@ export default
         snackbar: false,
         displayMessage: "",
         color: 'general',
+        headers: [
+            { text: 'ID', value: 'id' },
+            { text: 'Quantity', value: 'quantity' },
+            { text: 'Fulfilled', value: 'is_fullfilled' },
+            { text: 'Date Ordered', value: 'date_ordered' },
+            { text: 'Date Fulfilled', value: 'date_fullfilled' },
+            { text: 'Product Name', value: 'product.name' },
+            { text: 'Actions', value: 'actions', sortable: false },
+        ],
     }),
     methods: {
         getData() {
