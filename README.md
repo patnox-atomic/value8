@@ -96,8 +96,8 @@ The following languages are what we currently use in our company and will be giv
     Login before first use
     
     Running Tests:
-    	Backend (2 tests available): Run command on terminal: $ mvnw clean package
-    	Frontend: 
+    	Backend (2 tests available): Run command on terminal: $ mvn clean package
+    	Frontend: Run command on terminal: $ npm run test:unit
     
     Client Requirements:
     

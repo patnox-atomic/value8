@@ -129,15 +129,12 @@ export default
     }),
     methods: {
         getData() {
-            this.$http.get('/user', {
+            this.$http.get('/api/v1/user', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             })
             .then(response => {
-                ////this.total_items = Number(response.data.meta.querytotal);
-                ////this.payload = response.data.data;
-                ////this.loading = false;
                 // console.log('Users 1:: ' + JSON.stringify(response.data))
                 // console.log('Users 2:: ' + JSON.stringify(response.data.data))
                 this.users = response.data;
@@ -152,18 +149,15 @@ export default
                 email: this.userCreation.email,
                 password: this.userCreation.password,
             };
-            this.$http.post('/user', requestData, {
+            this.$http.post('/api/v1/user', requestData, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     },
                 })
                 .then(response => {
-                    ////this.total_items = Number(response.data.meta.querytotal);
-                    ////this.payload = response.data.data;
-                    ////this.loading = false;
                     // console.log('Orders 1:: ' + JSON.stringify(response.data))
                     // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
-                    //this.orders = response.data;
+                    this.getData();
                     this.displayMessage = "User Saved Successfully";
                     this.snackbar = true;
                     console.log('User saved successfully');

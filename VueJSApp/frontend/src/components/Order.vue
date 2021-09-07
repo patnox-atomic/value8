@@ -148,7 +148,7 @@ export default
     }),
     methods: {
         getData() {
-            this.$http.get('/order', {
+            this.$http.get('/api/v1/order', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
@@ -165,7 +165,7 @@ export default
             .catch(error => console.log('Order Get Error:: ' + error))
         },
         getProducts() {
-            this.$http.get('/product', {
+            this.$http.get('/api/v1/product', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
@@ -239,7 +239,7 @@ export default
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             }
-            this.$http.post('/order/fullfill', body, config)
+            this.$http.post('/api/v1/order/fullfill', body, config)
                 .then(response => {
                     // console.log('Orders 1:: ' + JSON.stringify(response.data))
                     // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
@@ -260,7 +260,7 @@ export default
                 product_id: this.orderCreation.product_id,
                 quantity: this.orderCreation.quantity,
             };
-            this.$http.post('/order', requestData, {
+            this.$http.post('/api/v1/order', requestData, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     },

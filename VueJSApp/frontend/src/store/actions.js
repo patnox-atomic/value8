@@ -28,7 +28,9 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }
-      axios.post('http://localhost:8080/login', body, config)
+      let url = '/login';
+      console.log('URL is: ' + JSON.stringify(url))
+      axios.post(url, body, config)
         .then(response => {
           const accessToken = response.data.accesstoken
           //const user = response.data.username

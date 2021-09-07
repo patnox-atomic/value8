@@ -108,7 +108,7 @@ export default
     }),
     methods: {
         getData() {
-            this.$http.get('/sale', {
+            this.$http.get('/api/v1/sale', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
@@ -125,7 +125,7 @@ export default
             .catch(error => console.log('Sale Get Error:: ' + error))
         },
         getProducts() {
-            this.$http.get('/product', {
+            this.$http.get('/api/v1/product', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
@@ -177,18 +177,15 @@ export default
                 quantity: this.saleCreation.quantity,
                 price: this.saleCreation.price,
             };
-            this.$http.post('/sale', requestData, {
+            this.$http.post('/api/v1/sale', requestData, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     },
                 })
                 .then(response => {
-                    ////this.total_items = Number(response.data.meta.querytotal);
-                    ////this.payload = response.data.data;
-                    ////this.loading = false;
                     // console.log('Orders 1:: ' + JSON.stringify(response.data))
                     // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
-                    //this.orders = response.data;
+                    this.getData();
                     this.displayMessage = "Sale Saved Successfully";
                     this.snackbar = true;
                     console.log('Sale saved successfully');

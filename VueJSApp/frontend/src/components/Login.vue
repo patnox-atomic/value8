@@ -18,7 +18,7 @@
                         <h1 class="white--text font-weight-medium mt-16 d-sm-pl-8 d-xs-pl-6">Evron<span class="red--text">Food</span></h1>
                         <h2 class="white--text d-sm-pl-6">Discover great food <span class="yellow--text">that rules out </span></h2>
                         <p class="white--text d-sm-pl-6">Food is eternal and has limitless potential in grasping and treating great forces on the earth.However to get started login to your existing account or create one if you dont have.</p>
-                        <v-dialog v-model="dialog" scrollable max-width="500px">
+                        <v-dialog ref="loginDialog" v-model="dialog" scrollable max-width="500px">
                             <!-- Login popup modal -->
                             <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -26,6 +26,7 @@
                                 dark
                                 v-bind="attrs"
                                 v-on="on"
+                                ref="loginDialogButton"
                             >
                                 Login
                             </v-btn>
@@ -55,12 +56,12 @@
                             </v-card-text>
                             <v-divider></v-divider>
                             <v-card-actions>
-                                <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                                <v-btn color="blue darken-1" text @click.prevent="login">login</v-btn>
+                                <v-btn ref="buttonCloseLoginDialog" color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                                <v-btn ref="buttonLogintoApp" color="blue darken-1" text @click.prevent="login">login</v-btn>
                             </v-card-actions>
                             </v-card>
                         </v-dialog>
-                        <v-btn class="ml-2" outlined color="white" to="/register">
+                        <v-btn class="ml-2" ref="registerButton" outlined color="white" to="/register">
                             Register
                         </v-btn>
                         <v-snackbar
@@ -130,6 +131,9 @@ export default {
         }
         )
     }
+  },
+  mounted() {
+      //console.log("Document Refs: " + Object.keys(this.$refs));
   },
   metaInfo () {
     return {

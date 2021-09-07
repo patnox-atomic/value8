@@ -12,6 +12,7 @@ import vuetify from './plugins/vuetify'
 // Sync router with store
 import { sync } from 'vuex-router-sync'
 Vue.prototype.$http = axios
+//Vue.prototype.$authurl = "http://127.0.0.1:8080"
 
 Vue.config.productionTip = false
 
@@ -19,7 +20,8 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 
 //API URL
-axios.defaults.baseURL = "http://localhost:8080/api/v1"
+//axios.defaults.baseURL = "http://127.0.0.1:8080/api/v1"
+axios.defaults.baseURL = "http://127.0.0.1:8080"
 
 axios.defaults.headers.get['Accept'] = 'application/json'
 

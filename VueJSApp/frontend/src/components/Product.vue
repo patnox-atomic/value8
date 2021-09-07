@@ -132,7 +132,7 @@ export default
     }),
     methods: {
         getData() {
-            this.$http.get('/product', {
+            this.$http.get('/api/v1/product', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
@@ -158,7 +158,7 @@ export default
                 reorder_level: this.productCreation.reorder_level,
                 reorder_quantity: this.productCreation.reorder_quantity
             };
-            this.$http.post('/product', requestData, {
+            this.$http.post('/api/v1/product', requestData, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     },
@@ -170,6 +170,7 @@ export default
                     // console.log('Orders 1:: ' + JSON.stringify(response.data))
                     // console.log('Orders 2:: ' + JSON.stringify(response.data.data))
                     //this.orders = response.data;
+                    this.getData();
                     this.displayMessage = "Product Saved Successfully";
                     this.snackbar = true;
                     console.log('Product saved successfully');
