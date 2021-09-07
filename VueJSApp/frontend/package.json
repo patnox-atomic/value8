@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "dev": "npm run serve",
+    "start": "vue-cli-service serve",
     "test:unit": "vue-cli-service test:unit --require tests/unit/setup.js"
   },
   "dependencies": {
